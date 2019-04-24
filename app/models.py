@@ -1,16 +1,21 @@
 from datetime import date
 
 from app import db
-
-class Event(models.Model): 
-    name_event = models.CharField(max_length=50)
-    event_location = models.CharField(max_length=50)
-    coverage_area = models.CharField(max_length=50)
-    date_start_event = models.DateField(auto_now=False, auto_now_add=False)
-    date_end_event = models.DateField(auto_now=False, auto_now_add=False)
-    event_deion = models.TextField()
-    event_coordinator = models.OneToOneField(User, on_delete=models.CASCADE)
+class Event(db.Model): 
+    """
+    Create an Event table
+    """
+    __tablename__ = 'events'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name_event = db.Column(db.String(256))
+    event_location = db.Column(db.String(512))
+    coverage_area = db.Column(db.String(64))
+    date_start_event = db.Column(db.Date)
+    date_end_event = db.Column(db.Date)
+    event_description = db.Column(db.String(2048))
+    event_coordinator = db.Column(db.Integer, nullable=False) 
+    #event_coordinator = models.OneToOneField(User, on_delete=models.CASCADE) << Criar chave Foreign key 
 
     def __repr__(self):
         return '<>Evento: {}'.format(self.name_event)
-
