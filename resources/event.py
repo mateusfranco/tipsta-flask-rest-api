@@ -30,7 +30,7 @@ class Event_All(Resource):
             return jsonify({'message': 'No input data provided'}), 400   
         email = json_data["email"]
         token_verify = json_data["token"]
-        token = redis.hget(email)
+        token = redis.hget(email, "field1")
         if(token != token_verify):
             return jsonify({'message': 'token wrong'}), 400
         event = Event(name_event = json_data["name_event"],
@@ -45,9 +45,41 @@ class Event_All(Resource):
         db.session.commit()
         return 200
 
-
-        
     def put(self):
-        pass
+        json_data = request.get_json(force=True)
+        if(not json_data):
+            return jsonify({'message': 'No input data provided'}), 400   
+        email = json_data["email"]
+        token_verify = json_data["token"]
+        token = redis.hget(email, "field1")
+        if(token != token_verify):
+            return jsonify({'message': 'token wrong'}), 400
+        event = Event.query.filter_by(name_event=json_data["name_event"]).first()
+        if(json_data["new_name"]):
+            event.name_event = json_data["new_name"]
+        event.event_location = json_data["event_location"]
+        event.coverage_area =  json_data["coverage_area"]
+        event.date_start_event = json_data["date_start_event"]
+        event.date_end_event = json_data["date_end_event"]
+        event.event_description = json_data["event_description"]
+        event.event_coordinator = json_data["event_coordinator"]
+        db.session.add(event)
+        db.session.commit()
+
     def delete(self):
-        pass
+        json_data = request.get_json(force=True)
+        if(not json_data):
+            return jsonify({'message': 'No input data provided'}), 400   
+        email = json_data["email"]
+        token_verify = json_data["token"]
+        token = redis.hget(email, "field1")
+        if(token != token_verify):
+            return jsonify({'message': 'token wrong'}), 400
+        event = Event.query.filter_by(name_event=json_data["name_event"]).first()
+        if(event.event_coordinato == email):
+            db.session.delete(event)
+            db.session.commit()
+            return 200
+        return jsonify({"error":"voce nao e o cooredenador do evento"}), 400
+           
+        
