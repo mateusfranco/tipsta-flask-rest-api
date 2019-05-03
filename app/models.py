@@ -29,7 +29,7 @@ class Trail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     date_start = db.Column(db.Date)
-    date_end = db.Column(db.date)
+    date_end = db.Column(db.Date)
     coordinator = db.Column(db.Integer)
     belong = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     checklist = db.relationship('Checklist', backref='trail', cascade='all, delete-orphan', lazy='dynamic')
