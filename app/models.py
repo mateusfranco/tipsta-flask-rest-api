@@ -28,13 +28,15 @@ class Trail(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
+    description = db.Column(db.String(2048))
     date_start = db.Column(db.Date)
     date_end = db.Column(db.Date)
     coordinator = db.Column(db.Integer)
     belong = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     checklist = db.relationship('Checklist', backref='trail', cascade='all, delete-orphan', lazy='dynamic')
     appraiser = db.relationship('Appraiser', backref='trail', cascade='all, delete-orphan', lazy='dynamic')
-     
+    submission = db.relationship('Submission', backref='trail', cascade='all, delete-orphan', lazy='dynamic')
+
     def __repr__(self):
         return '<>Trilha: {}'.format(self.name)
 
@@ -51,6 +53,7 @@ class Submission(db.Model):
     status = db.Column(db.String(64))
     grade = db.Column(db.Integer)
     author = db.Column(db.Integer)
+    submitted = db.Column(db.Integer, db.ForeignKey('trail.id', nullable=False))
 
     def __repr__(self):
         return '<>Submissao: {}'.format(self.title)
