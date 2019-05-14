@@ -14,7 +14,8 @@ class Event(db.Model):
     date_start = db.Column(db.Date)
     date_end = db.Column(db.Date)
     description = db.Column(db.String(2048))
-    coordinator = db.Column(db.Integer, nullable=False) 
+    coordinator = db.Column(db.Integer, nullable=False)
+    accepted = db.Column(db.Boolean, unique=False, default=False) 
     trail = db.relationship('Trail', backref='events', cascade='all, delete-orphan', lazy='dynamic')
     
     def __repr__(self):
